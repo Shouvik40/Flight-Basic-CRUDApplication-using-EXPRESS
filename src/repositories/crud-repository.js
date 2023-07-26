@@ -11,19 +11,10 @@ class CrudRepository {
     const response = await this.model.create(data);
     return response;
   }
-  //
-  // Delete
-  async destroy(data) {
-    const response = await this.model.destroy({
-      where: {
-        id: data,
-      },
-    });
-    return response;
-  }
   // Read singele data
   async get(data) {
     const response = await this.model.findByPk(data);
+    console.log(response);
     if (!response) {
       throw new AppError(
         "Not able to find the resourse",
@@ -32,9 +23,25 @@ class CrudRepository {
     }
     return response;
   }
-  // Read
+  //
+  // Read All
   async getAll() {
     const response = await this.model.findAll();
+    return response;
+  }
+  // Delete
+  async destroy(data) {
+    const response = await this.model.destroy({
+      where: {
+        id: data,
+      },
+    });
+    if (!response) {
+      throw new AppError(
+        "Not able to find the resourse",
+        StatusCodes.NOT_FOUND
+      );
+    }
     return response;
   }
   // Update
@@ -45,6 +52,14 @@ class CrudRepository {
         id: id,
       },
     });
+    // console.log(typeof response);
+
+    if (!response[0]) {
+      throw new AppError(
+        "Not able to find the resourse",
+        StatusCodes.NOT_FOUND
+      );
+    }
     return response;
   }
 }
