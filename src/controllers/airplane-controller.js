@@ -2,12 +2,12 @@ const { response } = require("express");
 const { AirplaneService } = require("../services");
 const { StatusCodes } = require("http-status-codes");
 const { SuccessResponse, ErrorResponse } = require("../utils/common");
+
 /**
- * POST : /airplane
+ * POST : /airplanes
  * req-body {modelNumber :"airbus320", capacity:200}
  *
  */
-
 async function createAirplane(req, res) {
   try {
     const airplane = await AirplaneService.createAirplane({
@@ -21,20 +21,39 @@ async function createAirplane(req, res) {
     return res.status(error.statusCode).json(ErrorResponse);
   }
 }
-async function getAllAirplanes(req, res) {
+/**
+ * GET : /airplanes
+ * req-body {}
+ *
+ */
+async function getAirplanes(req, res) {
   try {
-    console.log("Inside controller");
-    const airplane = await AirplaneService.getAllAirplane();
-    SuccessResponse.data = airplane;
-    return res.status(StatusCodes.CREATED).json(SuccessResponse);
+    const airplanes = await AirplaneService.getAirplanes();
+    SuccessResponse.data = airplanes;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
     ErrorResponse.error = error;
     return res.status(error.statusCode).json(ErrorResponse);
   }
 }
+/**
+ * POST : /airplanes/:id
+ * req-body {}
+ *
+ */
+async function getAirplane(req, res) {
+  try {
+    const airplane = await AirplaneService.getAirplane(req.params.id);
+    SuccessResponse.data = airplane;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+}
+
 async function deleteAirplane(req, res) {
   try {
-    console.log("Inside controller");
     const airplane = await AirplaneService.deleteAirplane(req.body.id);
     SuccessResponse.data = airplane;
     return res.status(StatusCodes.CREATED).json(SuccessResponse);
@@ -46,6 +65,7 @@ async function deleteAirplane(req, res) {
 
 module.exports = {
   createAirplane,
-  getAllAirplanes,
+  getAirplanes,
+  getAirplane,
   deleteAirplane,
 };
