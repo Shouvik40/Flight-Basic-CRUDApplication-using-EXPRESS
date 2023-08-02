@@ -89,3 +89,19 @@ SELECT airports.id AS airportId, airports.name AS airportName, airports.code AS 
 FROM airports
 JOIN cities ON airports.cityId = cities.id;
 ```
+
+# Js to get date from ddmmyy to (2023-08-16T18:30:00) ISO 8601 date and time format and get the next date. Months are 0-indexed in js
+
+```
+    const day = parseInt(startDate.slice(0, 2));
+    const month = parseInt(startDate.slice(2, 4)) - 1; // Months are 0-indexed in JavaScript
+    const year = parseInt(startDate.slice(4, 8));
+    const dateObject = new Date(year, month, day);
+
+    const nextDay = new Date(dateObject);
+    nextDay.setDate(dateObject.getDate() + 1);
+```
+
+# How "order" works for more than one parameters-
+
+if we have the sorting parameters "departureTime_ASC,price_DESC", it means we want to sort the data primarily by departureTime in ascending order (ASC), and if there are any ties in departureTime, we want to sort those tied rows by price in descending order (DESC).
