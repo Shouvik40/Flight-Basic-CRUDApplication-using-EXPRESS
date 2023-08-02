@@ -66,3 +66,26 @@ SELECT
         REFERENCED_TABLE_NAME IS NOT NULL;
 
 ```
+
+or
+
+```
+select * from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where TABLE_NAME ='flights' and CONSTRAINT_SCHEMA ='flights'
+```
+
+## Get cities name from airports using cityId
+
+```
+SELECT cities.name AS cityName
+FROM airports
+JOIN cities ON airports.cityId = cities.id
+WHERE airports.id = 1;
+```
+
+## Join airports and cities using cityId of airports
+
+```
+SELECT airports.id AS airportId, airports.name AS airportName, airports.code AS airportCode, airports.address, cities.id AS cityId, cities.name AS cityName
+FROM airports
+JOIN cities ON airports.cityId = cities.id;
+```
