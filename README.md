@@ -102,6 +102,76 @@ JOIN cities ON airports.cityId = cities.id;
     nextDay.setDate(dateObject.getDate() + 1);
 ```
 
-# How "order" works for more than one parameters-
+# How "order" works for more than one parameters
 
 if we have the sorting parameters "departureTime_ASC,price_DESC", it means we want to sort the data primarily by departureTime in ascending order (ASC), and if there are any ties in departureTime, we want to sort those tied rows by price in descending order (DESC).
+
+# In our Flight model's departureAirportId in joined with Airport model's code and not id. So to join multiple cols "ON"
+
+```
+          on: {
+            col1: Sequelize.where(
+              Sequelize.col("Flight.departureAirportId"),
+              "=",
+              Sequelize.col("Airport.code")
+            ),
+          },
+```
+
+# mysql code to get city name from Flights.departureAirportId = Airports.code and Airports.cityId =City.id
+
+```
+SELECT
+    F.id,
+    F.flightNumber,
+    F.departureAirportId,
+    A1.code AS departureAirportCode,
+    A1.cityId AS departureCityId,
+    C1.name AS departureCityName,
+    F.arrivalAirportId,
+    A2.code AS arrivalAirportCode,
+    A2.cityId AS arrivalCityId,
+    C2.name AS arrivalCityName
+FROM
+    Flights F
+JOIN
+    Airports A1 ON F.departureAirportId = A1.code
+JOIN
+    Airports A2 ON F.arrivalAirportId = A2.code
+JOIN
+    Cities C1 ON A1.cityId = C1.id
+JOIN
+    Cities C2 ON A2.cityId = C2.id;
+
+
+```
+
+or
+
+```
+SELECT
+    depCity.name AS departureCityName,
+    arrCity.name AS arrivalCityName
+FROM
+    Flights F
+JOIN
+    Airports depAirport ON F.departureAirportId = depAirport.code
+JOIN
+    Airports arrAirport ON F.arrivalAirportId = arrAirport.code
+JOIN
+    Cities depCity ON depAirport.cityId = depCity.id
+JOIN
+    Cities arrCity ON arrAirport.cityId = arrCity.id;
+
+```
+
+# Movie Table vs Airline Table
+
+Airline --> row:int , col:str
+1 A B C D E F  
+2 A B C D E F
+
+Movie --> row:str, col:int
+A 1 2 3 4 5 6 7
+B 1 2 3 4 5 6 7
+C 1 2 3 4 5 6 7

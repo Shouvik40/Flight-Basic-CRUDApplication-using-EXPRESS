@@ -74,7 +74,7 @@ async function getAllFlights(query) {
     nextDay.setDate(dateObject.getDate() + 1);
 
     const currentDate = new Date();
-    console.log(dateObject, currentDate);
+    // console.log(dateObject, currentDate);
     if (dateObject < currentDate) {
       throw new AppError(
         "Departure date cannot be before the current date.",
@@ -96,8 +96,10 @@ async function getAllFlights(query) {
       customFilter,
       sortFilter
     );
+    // departureAirportId
     return flights;
   } catch (error) {
+    console.log(error);
     if (error.statusCode && error.explanation) {
       throw new AppError(error.explanation, error.statusCode);
     } else {
