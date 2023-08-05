@@ -118,7 +118,7 @@ if we have the sorting parameters "departureTime_ASC,price_DESC", it means we wa
           },
 ```
 
-# mysql code to get city name from Flights.departureAirportId = Airports.code and Airports.cityId =City.id
+# mysql code to get city name from Flights.departureAirportId = Airports.code and Airports.cityId = City.id
 
 ```
 SELECT
