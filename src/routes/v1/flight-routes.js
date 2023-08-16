@@ -12,10 +12,9 @@ router.post(
   FlightController.createFlight
 );
 // /api/v1/flights?trips=MUM-DEL GET
-router.get(
-  "/",
+router.get("/", FlightController.getAllFlights);
 
-  FlightController.getAllFlights
-);
+// /api/v1/flights?trips=MUM-DEL GET
+router.get("/:id", FlightController.getFlight);
 
 module.exports = router;
