@@ -3,6 +3,7 @@ const { Flight, Airport, City, Airplane } = require("../models");
 const db = require("../models");
 const { Sequelize, Op } = require("sequelize");
 const { convertToBoolean } = require("../utils/helpers/conversion-herpers");
+const { addRowLockOnFlights } = require("./queries");
 class FlightRepository extends CrudRepository {
   constructor() {
     super(Flight);
@@ -54,9 +55,7 @@ class FlightRepository extends CrudRepository {
     return response;
   }
   async updateRemainingSeats(flightId, seats, dec = true) {
-    await db.sequelize.query(
-      `SELECT * from Flights WHERE Flights.id = ${flightId} FOR UPDATE;`
-    );
+    await db.sequelize.query(addRowLockOnFlights(flightId));
 
     let ifDecrease = convertToBoolean(dec);
     const flight = await Flight.findByPk(flightId);
