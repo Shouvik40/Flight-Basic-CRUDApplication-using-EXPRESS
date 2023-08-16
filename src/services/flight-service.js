@@ -127,9 +127,25 @@ async function getFlight(id) {
     );
   }
 }
-
+async function updateSeats(data) {
+  try {
+    const res = await flightRepository.updateRemainingSeats(
+      data.flightId,
+      data.seats,
+      data.dec
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(
+      "Cannot fetch data of the flight",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
 module.exports = {
   createFlight,
   getAllFlights,
   getFlight,
+  updateSeats,
 };
