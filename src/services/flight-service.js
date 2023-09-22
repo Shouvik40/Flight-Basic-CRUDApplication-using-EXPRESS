@@ -8,10 +8,7 @@ const flightRepository = new FlightRepository();
 async function createFlight(data) {
   try {
     if (!compareTime(data.departureTime, data.arrivalTime)) {
-      throw new AppError(
-        "Departure time must be earlier than arrival time",
-        StatusCodes.BAD_REQUEST
-      );
+      throw new AppError("Departure time must be earlier than arrival time", StatusCodes.BAD_REQUEST);
     }
     const flight = await flightRepository.create(data);
     return flight;
@@ -27,10 +24,7 @@ async function createFlight(data) {
     if (error.statusCode && error.explanation) {
       throw new AppError(error.explanation, error.statusCode);
     } else {
-      throw new AppError(
-        "Cannot create a new Flight object",
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      throw new AppError("Cannot create a new Flight object", StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 }
@@ -42,10 +36,7 @@ async function getAllFlights(query) {
     [departureAirportId, arrivalAirportId] = query.trips.split("-");
     // Added a check that they are not same
     if (departureAirportId === arrivalAirportId) {
-      throw new AppError(
-        "departure airport and arrival airport cannot be same",
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      throw new AppError("departure airport and arrival airport cannot be same", StatusCodes.INTERNAL_SERVER_ERROR);
     } else {
       customFilter.departureAirportId = departureAirportId;
       customFilter.arrivalAirportId = arrivalAirportId;
@@ -76,10 +67,7 @@ async function getAllFlights(query) {
     const currentDate = new Date();
     // console.log(dateObject, currentDate);
     if (dateObject < currentDate) {
-      throw new AppError(
-        "Departure date cannot be before the current date.",
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      throw new AppError("Departure date cannot be before the current date.", StatusCodes.INTERNAL_SERVER_ERROR);
     }
     customFilter.departureTime = {
       [Op.gte]: dateObject,
@@ -92,10 +80,7 @@ async function getAllFlights(query) {
     sortFilter = params.map((param) => param.split("_"));
   }
   try {
-    const flights = await flightRepository.getAllFlights(
-      customFilter,
-      sortFilter
-    );
+    const flights = await flightRepository.getAllFlights(customFilter, sortFilter);
     // departureAirportId
     return flights;
   } catch (error) {
@@ -103,10 +88,7 @@ async function getAllFlights(query) {
     if (error.statusCode && error.explanation) {
       throw new AppError(error.explanation, error.statusCode);
     } else {
-      throw new AppError(
-        "Cannot fetch data of all the flights",
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      throw new AppError("Cannot fetch data of all the flights", StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 }
@@ -116,31 +98,18 @@ async function getFlight(id) {
     return flight;
   } catch (error) {
     if (error.statusCode == StatusCodes.NOT_FOUND) {
-      throw new AppError(
-        "The flight you requested is not present",
-        error.statusCode
-      );
+      throw new AppError("The flight you requested is not present", error.statusCode);
     }
-    throw new AppError(
-      "Cannot fetch data of all the flight",
-      StatusCodes.INTERNAL_SERVER_ERROR
-    );
+    throw new AppError("Cannot fetch data of all the flight", StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 async function updateSeats(data) {
   try {
-    const res = await flightRepository.updateRemainingSeats(
-      data.flightId,
-      data.seats,
-      data.dec
-    );
+    const res = await flightRepository.updateRemainingSeats(data.flightId, data.seats, data.dec);
     return res;
   } catch (error) {
     console.log(error);
-    throw new AppError(
-      "Cannot fetch data of the flight",
-      StatusCodes.INTERNAL_SERVER_ERROR
-    );
+    throw new AppError("Cannot fetch data of the flight", StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 module.exports = {
